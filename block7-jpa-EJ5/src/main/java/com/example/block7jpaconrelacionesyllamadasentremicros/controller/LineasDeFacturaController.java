@@ -1,5 +1,6 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.controller;
 
+import com.example.block7jpaconrelacionesyllamadasentremicros.application.LineasDeFacturaService;
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation.LineasDeFacturaServiceImpl;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoLineasDeFactura.lineasDeFacturaInputDto.LineasDeFacturaInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoLineasDeFactura.lineasDeFacturaOutPut.LineasDeFacturaOutPutComplete;
@@ -13,7 +14,7 @@ import java.util.List;
 public class LineasDeFacturaController {
 
     @Autowired
-    private LineasDeFacturaServiceImpl lineasDeFacturaService;
+    private LineasDeFacturaService lineasDeFacturaService;
     @GetMapping("/{id}")
     public LineasDeFacturaOutPutComplete getLineasDeFacutra(@PathVariable int id) {
         return lineasDeFacturaService.getLineasDeFacutra(id);

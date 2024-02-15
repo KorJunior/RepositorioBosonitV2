@@ -15,9 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LineasDeFactura {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idLinea;
-
     private int cantidad;
     private float precio;
     private float importe;

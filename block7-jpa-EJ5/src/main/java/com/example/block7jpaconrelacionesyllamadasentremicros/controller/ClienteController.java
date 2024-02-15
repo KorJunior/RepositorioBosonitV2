@@ -1,5 +1,6 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.controller;
 
+import com.example.block7jpaconrelacionesyllamadasentremicros.application.ClienteService;
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation.ClienteServiceImpl;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.ClienteInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
@@ -13,7 +14,7 @@ import java.util.List;
 public class ClienteController {
 
     @Autowired
-    private ClienteServiceImpl clienteService;
+    private ClienteService clienteService;
 
 
     @GetMapping("/{id}")
@@ -24,6 +25,10 @@ public class ClienteController {
     @PostMapping
     public ClienteOutputDtoComplete addCliente(@RequestBody ClienteInputDto clienteInputDto) {
         return clienteService.addCliente(clienteInputDto);
+    }
+    @GetMapping("/nombre/{nombre}")
+    public List<ClienteOutputDtoComplete> findByName(@PathVariable String nombre) {
+        return clienteService.findByName(nombre);
     }
 
     @PutMapping("/{id}")

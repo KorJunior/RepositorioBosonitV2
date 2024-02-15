@@ -3,6 +3,7 @@ package com.example.block7jpaconrelacionesyllamadasentremicros.application;
 
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoInputDto.ProductoInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoComplete;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface ProductoService {
     ProductoOutPutDtoComplete updateProducto(ProductoInputDto producto);
     void deleteProducto(int id);
     List<ProductoOutPutDtoComplete> getAllProducto();
+    List<ProductoOutPutDtoComplete> getProductoByNombre(String nombre);
 }

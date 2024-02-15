@@ -1,5 +1,6 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.controller;
 
+import com.example.block7jpaconrelacionesyllamadasentremicros.application.ProvinciaService;
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation.ProvinciaServiceImpl;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.ProvinciaInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutComplete;
@@ -13,11 +14,15 @@ import java.util.List;
 public class ProvinciaController {
 
     @Autowired
-    private ProvinciaServiceImpl provinciaService;
+    private ProvinciaService provinciaService;
 
     @PostMapping
     public ProvinciaOutPutComplete addCliente(@RequestBody ProvinciaInputDto provinciaInputDto) {
         return provinciaService.addProvincia(provinciaInputDto);
+    }
+    @GetMapping("/nombre/{nombre}")
+    public List<ProvinciaOutPutComplete> getProvinciaByNombre(@PathVariable String nombre) {
+        return provinciaService.getProvinciaByNombre(nombre);
     }
 
     @GetMapping

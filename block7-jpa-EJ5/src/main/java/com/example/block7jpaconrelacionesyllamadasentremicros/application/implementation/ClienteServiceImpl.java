@@ -3,8 +3,10 @@ package com.example.block7jpaconrelacionesyllamadasentremicros.application.imple
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.ClienteService;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.ClienteInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
+import com.example.block7jpaconrelacionesyllamadasentremicros.domain.CabeceraDeFactura;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Cliente;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Provincia;
+import com.example.block7jpaconrelacionesyllamadasentremicros.repository.CabeceraDeFacturaRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ClienteRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ProvinciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +24,8 @@ public class ClienteServiceImpl  implements ClienteService {
     ClienteRepository clienteRepository;
     @Autowired
     ProvinciaRepository provinciaRepository;
+    @Autowired
+    CabeceraDeFacturaRepository cabeceraDeFacturaRepository;
 
     @Override
     public ClienteOutputDtoComplete getCliente(String id) {
@@ -48,6 +53,16 @@ public class ClienteServiceImpl  implements ClienteService {
         }
     }
 
+    public List<ClienteOutputDtoComplete> findByName(String nombre) {
+        Optional<List<Cliente>> clientes = clienteRepository.findByNombre(nombre);
+
+        return clientes.orElseThrow(() -> new NoSuchElementException("No existe el cliente"))
+                .stream()
+                .map(Cliente::toClienteOutputDto)
+                .collect(Collectors.toList());
+
+    }
+
     @Override
     public ClienteOutputDtoComplete updateCliente(ClienteInputDto clienteInputDto) {
         return null;
@@ -55,7 +70,12 @@ public class ClienteServiceImpl  implements ClienteService {
 
     @Override
     public void deleteCliente(String id) {
-
+        Optional<List<CabeceraDeFactura>> cabeceraDeFactura = cabeceraDeFacturaRepository.findByDniCliente(id);
+        if (cabeceraDeFactura.isEmpty()) {
+            throw new RuntimeException("No se puede borrar el cliente porque tiene facturas asociadas");
+        }else{
+            clienteRepository.deleteById(id);
+        }
     }
 
     @Override

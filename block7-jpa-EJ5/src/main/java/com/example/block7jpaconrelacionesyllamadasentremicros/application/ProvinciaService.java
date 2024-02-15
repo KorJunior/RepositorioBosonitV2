@@ -12,4 +12,5 @@ public interface ProvinciaService {
     ProvinciaOutPutComplete updateProvincia(ProvinciaInputDto provincia);
     void deleteProvincia(int id);
     List<ProvinciaOutPutComplete> getAllProvincia();
+    List<ProvinciaOutPutComplete> getProvinciaByNombre(String nombre);
 }

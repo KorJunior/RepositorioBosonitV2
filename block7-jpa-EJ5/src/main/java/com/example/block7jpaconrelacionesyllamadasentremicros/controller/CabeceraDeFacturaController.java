@@ -1,5 +1,6 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.controller;
 
+import com.example.block7jpaconrelacionesyllamadasentremicros.application.CabeceraDeFacturaService;
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation.CabeceraDeFacturaServiceImpl;
 
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.CabeceraDeFacturaInputDto;
@@ -10,6 +11,9 @@ import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dto
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,7 +21,7 @@ import java.util.List;
 public class CabeceraDeFacturaController {
 
     @Autowired
-    private CabeceraDeFacturaServiceImpl cabeceraDeFacturaService;
+    private CabeceraDeFacturaService cabeceraDeFacturaService;
 
     @PostMapping
     public CabeceraDeFacturaOutPutDtoComplete addCabeceraDeFactura(@RequestBody CabeceraDeFacturaInputDto cabeceraDeFacturaInputDto) {
@@ -32,6 +36,23 @@ public class CabeceraDeFacturaController {
     public FacturaOutput addFactura(@RequestBody FacturaInputDto facturaInputDto) {
         System.out.println(facturaInputDto);
          return cabeceraDeFacturaService.addFactura(facturaInputDto);
-
     }
+    @GetMapping("/getAllFacturas")
+    public List<FacturaOutput> getAllFactura() {
+        return cabeceraDeFacturaService.getAllFacturas();
+    }
+    @GetMapping("/getFacturaByCodigoProducto/{codigo}")
+    public List<FacturaOutput> getFacturaByCodigoProducto(@PathVariable Long codigo) {
+        return cabeceraDeFacturaService.getFacturaByCodigoProducto(codigo);
+    }
+    @GetMapping("/getFacturaByClienteAndRangoDeFechas")
+    public List<FacturaOutput> getFacturaByClienteAndRangoDeFechas(@RequestParam String idCliente, @RequestParam String fechaInicio, @RequestParam String fechaFin) {
+        return cabeceraDeFacturaService.findByFacturaWithClienteAndRangoDeFechas(idCliente, fechaInicio, fechaFin);
+    }
+    @GetMapping("/getFacturaById/{id}")
+    public FacturaOutput getFacturaById(@PathVariable Integer id) {
+        return cabeceraDeFacturaService.findByIdCabecera(id);
+    }
+
+
 }

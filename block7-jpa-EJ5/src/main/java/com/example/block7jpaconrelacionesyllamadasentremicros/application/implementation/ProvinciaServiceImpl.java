@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,5 +53,14 @@ public class ProvinciaServiceImpl implements ProvinciaService {
         return provinciaRepository.findAll().stream()
                 .map(Provincia::toProvinciaOutPut)
                 .collect(Collectors.toList());
+    }
+
+    public List<ProvinciaOutPutComplete> getProvinciaByNombre(String nombre) {
+        Optional<List<Provincia>> provincias = provinciaRepository.findByNombre(nombre);
+        return provincias.orElseThrow(() ->new NoSuchElementException("No existe el cliente"))
+                .stream()
+                .map(Provincia::toProvinciaOutPut)
+                .collect(Collectors.toList());
+
     }
 }

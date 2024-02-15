@@ -12,4 +12,5 @@ public interface ClienteService {
     ClienteOutputDtoComplete updateCliente(ClienteInputDto clienteInputDto);
     void deleteCliente(String id);
     List<ClienteOutputDtoComplete> getAllCliente();
+    List<ClienteOutputDtoComplete> findByName(String nombre);
 }
