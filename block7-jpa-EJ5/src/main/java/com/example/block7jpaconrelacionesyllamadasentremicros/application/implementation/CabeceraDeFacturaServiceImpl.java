@@ -4,6 +4,7 @@ import com.example.block7jpaconrelacionesyllamadasentremicros.application.Cabece
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.CabeceraDeFacturaInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.FacturaInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.CabeceraDeFacturaOutPutDtoComplete;
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutPutHistorico;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutput;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoLineasDeFactura.lineasDeFacturaInputDto.LineasDeFacturaInputFactura;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.CabeceraDeFactura;
@@ -177,6 +178,25 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
     public FacturaOutput findByIdCabecera(Integer id) {
         Optional<CabeceraDeFactura> factura = cabeceraDeFacturaRepository.findByIdCabecera(id);
         return factura.map(FacturaOutput::new).orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"));
+    }
+
+    @Override
+    public List<FacturaOutPutHistorico> findByYear(int ano) {
+        return  cabeceraDeFacturaRepository.findByYear(ano)
+                .orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"))
+                .stream()
+                .map(FacturaOutPutHistorico::new)
+                .toList();
+
+    }
+
+    @Override
+    public List<FacturaOutPutHistorico> findByMonthAndYear(int mes, int ano) {
+        return cabeceraDeFacturaRepository.findByMonthAndYear(mes, ano)
+                .orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"))
+                .stream()
+                .map(FacturaOutPutHistorico::new)
+                .toList();
     }
 
 

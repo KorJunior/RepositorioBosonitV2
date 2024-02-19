@@ -3,9 +3,11 @@ package com.example.block7jpaconrelacionesyllamadasentremicros.application;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.CabeceraDeFacturaInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.FacturaInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.CabeceraDeFacturaOutPutDtoComplete;
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutPutHistorico;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutput;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.Year;
 import java.util.Date;
 import java.util.List;
 
@@ -21,5 +23,8 @@ public interface CabeceraDeFacturaService {
     List<FacturaOutput> getAllFacturas();
     List<FacturaOutput> findByFacturaWithClienteAndRangoDeFechas(String idCliente, String fechaInicio, String fechaFin);
     FacturaOutput findByIdCabecera(Integer id);
+
+    List<FacturaOutPutHistorico> findByYear(int ano);
+    List<FacturaOutPutHistorico> findByMonthAndYear(int mes, int ano);
 
 }

@@ -13,7 +13,6 @@ public interface CabeceraDeFacturaRepository  extends JpaRepository<CabeceraDeFa
 
     @Query("SELECT f FROM CabeceraDeFactura f JOIN f.lineasDeFactura l WHERE l.producto.idProducto = :codigo")
     Optional<List<CabeceraDeFactura>> findByCodigoDeProducto(@Param("codigo") Long codigo);
-
     @Query("SELECT f FROM CabeceraDeFactura f WHERE f.cliente.dni = :idCliente AND f.fechaFactura BETWEEN :fechaInicio AND :fechaFin")
     Optional<List<CabeceraDeFactura>> findByFacturaWithClienteAndRangoDeFechas(@Param("idCliente") String idCliente, @Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
     @Query("SELECT f FROM CabeceraDeFactura f WHERE f.idFactura = :id")
@@ -21,6 +20,12 @@ public interface CabeceraDeFacturaRepository  extends JpaRepository<CabeceraDeFa
 
     @Query("SELECT f FROM CabeceraDeFactura f WHERE f.cliente.dni = :dniCliente")
     Optional<List<CabeceraDeFactura>> findByDniCliente(@Param("dniCliente") String dniCliente);
+
+    @Query("SELECT f FROM CabeceraDeFactura f WHERE FUNCTION('YEAR', f.fechaFactura) = :anio")
+    Optional<List<CabeceraDeFactura>> findByYear(@Param("anio") int anio);
+
+    @Query("SELECT f FROM CabeceraDeFactura f WHERE FUNCTION('YEAR', f.fechaFactura) = :anio AND FUNCTION('MONTH', f.fechaFactura) = :mes")
+    Optional<List<CabeceraDeFactura>> findByMonthAndYear(@Param("mes") int mes, @Param("anio") int anio);
 
 
 

@@ -7,6 +7,7 @@ import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dto
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.FacturaInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.CabeceraDeFacturaOutPutDtoComplete;
 
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutPutHistorico;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,7 @@ public class CabeceraDeFacturaController {
     @GetMapping("/getAllFacturas")
     public List<FacturaOutput> getAllFactura() {
         return cabeceraDeFacturaService.getAllFacturas();
+
     }
     @GetMapping("/getFacturaByCodigoProducto/{codigo}")
     public List<FacturaOutput> getFacturaByCodigoProducto(@PathVariable Long codigo) {
@@ -52,6 +54,14 @@ public class CabeceraDeFacturaController {
     @GetMapping("/getFacturaById/{id}")
     public FacturaOutput getFacturaById(@PathVariable Integer id) {
         return cabeceraDeFacturaService.findByIdCabecera(id);
+    }
+    @GetMapping("/getFacturaByYear/{ano}")
+    public List<FacturaOutPutHistorico> getFacturaByYear(@PathVariable int ano) {
+        return cabeceraDeFacturaService.findByYear(ano);
+    }
+    @GetMapping("/getFacturaByMonthAndYear")
+    public List<FacturaOutPutHistorico> getFacturaByMonthAndYear(@RequestParam int mes, @RequestParam int ano) {
+        return cabeceraDeFacturaService.findByMonthAndYear(mes, ano);
     }
 
 
