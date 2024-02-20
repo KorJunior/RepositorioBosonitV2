@@ -24,10 +24,8 @@ public class HistoricoVenta {
     private String idCliente;
     private int mes;
     private int ano;
-    @ElementCollection
-    private List<Integer> cantidad;
-    @ElementCollection
-    private List<Long> idProducto;
+    private int cantidad;
+    private long idProducto;
     private float importeTotal;
 
 }

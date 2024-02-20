@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>block7-jpa-con-relaciones-y-llamadas-entre-micros</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>block7-jpa-con-relaciones-y-llamadas-entre-micros</name>
+	<artifactId>block7Facturas</artifactId>
+	<version>0.0.2-SNAPSHOT</version>
+	<name>block7Facturas</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>

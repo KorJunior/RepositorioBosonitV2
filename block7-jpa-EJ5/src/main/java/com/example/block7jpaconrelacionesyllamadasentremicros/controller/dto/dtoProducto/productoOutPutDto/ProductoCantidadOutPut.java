@@ -12,6 +12,7 @@ import lombok.Setter;
 public class ProductoCantidadOutPut {
         private Long producto;
         private Integer cantidad;
+        private int idLineaDeFactura;
 
         // Getters, setters y constructor
 

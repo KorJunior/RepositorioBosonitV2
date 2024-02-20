@@ -1,5 +1,6 @@
 package com.example.block7estadventa.application;
 
+import com.example.block7estadventa.controller.dto.HistoricoVentasOutPut;
 import com.example.block7estadventa.domain.HistoricoVenta;
 
 import java.time.Month;
@@ -8,6 +9,6 @@ import java.util.List;
 
 public interface HistoricoVentaService {
 
-    HistoricoVenta addHistoricoVentaMothWithYear(int mes, int ano);
-    List<HistoricoVenta> addHistoricoVentaYear(int ano);
+    List<HistoricoVentasOutPut> obtenerHistoricoVentaMesConAno(int mes, int ano);
+    List<HistoricoVentasOutPut> obtenerHistoricoVentaAno(int ano);
 }

@@ -29,7 +29,7 @@ public class ClienteServiceImpl  implements ClienteService {
 
     @Override
     public ClienteOutputDtoComplete getCliente(String id) {
-        return null;
+        return clienteRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No existe el cliente")).toClienteOutputDto();
     }
 
     @Override

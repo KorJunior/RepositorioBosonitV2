@@ -1,6 +1,8 @@
 package com.example.block7estadventa.application.implementation;
 
+import com.example.block7estadventa.cache.CacheMethods;
 import com.example.block7estadventa.application.HistoricoVentaService;
+import com.example.block7estadventa.controller.dto.HistoricoVentasOutPut;
 import com.example.block7estadventa.domain.HistoricoVenta;
 import com.example.block7estadventa.repository.HistoricoVentaRepository;
 import jakarta.transaction.Transactional;
@@ -10,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 
-import java.time.Month;
-import java.time.Year;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -19,35 +21,37 @@ public class HistoricoVentaServiceImpl implements HistoricoVentaService {
 
     @Autowired
     private HistoricoVentaRepository historicoVentaRepository;
+    @Autowired
+    private CacheMethods cacheMethods;
 
     @Transactional
     @Override
-    public HistoricoVenta addHistoricoVentaMothWithYear(int mes, int ano) {
-        HistoricoVenta historicoVenta = new HistoricoVenta();
+
+    public List<HistoricoVentasOutPut> obtenerHistoricoVentaMesConAno(int mes, int ano) {
+        List<HistoricoVenta> historicosGuardados = new ArrayList<>();
         List<Map<String, Object>> result;
-        Optional<HistoricoVenta> historicoVentaOptional;
+        Optional<List<HistoricoVenta>> historicoVentaOptional;
 
         historicoVentaOptional = historicoVentaRepository.findByMesAndAno(mes, ano);
+
         if (historicoVentaOptional.isPresent()) {
-            return historicoVentaOptional.get();
-        }
+            if (!historicoVentaOptional.get().isEmpty()) {
+                System.out.println(historicoVentaOptional.get());
+                return convertirAListaHistoricoVentasOutPut(historicoVentaOptional.get());
+            }
 
+        }
         result = obtenerFacturasMesAno(mes, ano);
-
-
         for (Map<String, Object> map : result) {
-            guardarHistorico(ano, historicoVenta, map, mes);
+            guardarHistorico(ano, map, mes, historicosGuardados);
         }
-        System.out.println("historicoVenta = " + historicoVenta);
-
-        return historicoVenta;
+        return convertirAListaHistoricoVentasOutPut(historicosGuardados);
     }
 
 
     private List<Map<String, Object>> obtenerFacturasMesAno(int mes, int ano) {
         String url = "http://localhost:8080/cabeceradefacturas/getFacturaByMonthAndYear?mes=" + mes + "&ano=" + ano;
         WebClient webClient = WebClient.create();
-        HistoricoVenta historicoVenta = new HistoricoVenta();
 
         return webClient.get()
                 .uri(url)
@@ -57,60 +61,92 @@ public class HistoricoVentaServiceImpl implements HistoricoVentaService {
                 .block();
     }
 
-    @Override
-    public List<HistoricoVenta> addHistoricoVentaYear(int ano) {
+    public List<HistoricoVentasOutPut> obtenerHistoricoVentaAno(int ano) {
         List<Map<String, Object>> result = obtenerFacturaAno(ano);
         List<HistoricoVenta> historicosGuardados = new ArrayList<>();
 
         for (Map<String, Object> map : result) {
-            Date fecha = (Date) map.get("fecha");
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(fecha);
-            int mes = cal.get(Calendar.MONTH) + 1;
+            Object fechaObj = map.get("fecha");
+            if (fechaObj instanceof String) {
+                ZonedDateTime fecha = ZonedDateTime.parse((String) fechaObj, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+                int mes = fecha.getMonthValue();
 
-            Optional<HistoricoVenta> historicoVentaOptional = historicoVentaRepository.findByMesAndAno(mes, ano);
+                Optional<List<HistoricoVenta>> historicoVentaOptional = historicoVentaRepository.findByMesAndAno(mes, ano);
 
-            if (historicoVentaOptional.isEmpty()) {
-                HistoricoVenta historicoVenta = new HistoricoVenta();
-                guardarHistorico(ano, historicoVenta, map, mes);
-                historicosGuardados.add(historicoVenta);
+                if (historicoVentaOptional.isPresent() && !historicoVentaOptional.get().isEmpty()) {
+                    return convertirAListaHistoricoVentasOutPut(historicoVentaOptional.get());
+                } else {
+                    guardarHistorico(ano, map, mes, historicosGuardados);
+                }
             }
         }
 
-        return historicosGuardados;
+        return convertirAListaHistoricoVentasOutPut(historicosGuardados);
+    }
+
+    List<HistoricoVentasOutPut> convertirAListaHistoricoVentasOutPut(List<HistoricoVenta> historicoVentas) {
+        List<HistoricoVentasOutPut> historicoVentasOutPuts = new ArrayList<>();
+        HistoricoVentasOutPut historicoVentasOutPut;
+        for (HistoricoVenta historicoVenta : historicoVentas) {
+            historicoVentasOutPut = new HistoricoVentasOutPut(historicoVenta);
+            historicoVentasOutPut.setProducto(cacheMethods.convertirIdProductoEnNombre(historicoVenta.getIdProducto()));
+            historicoVentasOutPut.setNombreCliente(cacheMethods.convertirDniClienteEnNombre(historicoVenta.getIdCliente()));
+            historicoVentasOutPuts.add(historicoVentasOutPut);
+        }
+        return historicoVentasOutPuts;
+
     }
 
 
-    private void guardarHistorico(int ano, HistoricoVenta historicoVenta, Map<String, Object> map, int mes) {
-        historicoVenta.setMes(mes);
-        historicoVenta.setAno(ano);
-        historicoVenta.setIdCliente((String) map.get("cliente"));
 
-        if (map.get("totalFactura") instanceof Number) {
-            historicoVenta.setImporteTotal(((Number) map.get("totalFactura")).floatValue());
-        }
+
+    private void guardarHistorico(int ano, Map<String, Object> map, int mes, List<HistoricoVenta> historicosGuardados) {
+
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> productos = (List<Map<String, Object>>) map.get("productos");
-        List<Long> idProductos = new ArrayList<>();
-        List<Integer> cantidades = new ArrayList<>();
 
         for (Map<String, Object> producto : productos) {
+            HistoricoVenta historicoVenta = new HistoricoVenta();
+            historicoVenta.setMes(mes);
+            historicoVenta.setAno(ano);
+            historicoVenta.setIdCliente((String) map.get("cliente"));
+
+
             Object productoId = producto.get("producto");
             Object cantidad = producto.get("cantidad");
+            Object idLinea = producto.get("idLineaDeFactura");
 
             if (productoId instanceof Number) {
-                idProductos.add(((Number) productoId).longValue());
+                historicoVenta.setIdProducto(((Number) productoId).longValue());
             }
 
             if (cantidad instanceof Number) {
-                cantidades.add(((Number) cantidad).intValue());
+                historicoVenta.setCantidad(((Number) cantidad).intValue());
             }
+            if (idLinea instanceof Number) {
+               int id= ((Number) idLinea).intValue();
+               historicoVenta.setImporteTotal(obtenerImporteTotal(id));
+            }
+            historicoVentaRepository.save(historicoVenta);
+            historicosGuardados.add(historicoVenta);
         }
-
-        historicoVenta.setIdProducto(idProductos);
-        historicoVenta.setCantidad(cantidades);
-        historicoVentaRepository.save(historicoVenta);
     }
+
+    private float obtenerImporteTotal(int id) {
+        String url = "http://localhost:8080/lineasdefactura/" + id;
+        WebClient webClient = WebClient.create();
+
+        Map<String, Object> response = webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .block();
+
+        assert response != null;
+        Number importe = (Number) response.get("importe");
+        return importe.floatValue();
+    }
+
 
     private static List<Map<String, Object>> obtenerFacturaAno(int ano) {
         String url = "http://localhost:8080/cabeceradefacturas/getFacturaByYear/" + ano;

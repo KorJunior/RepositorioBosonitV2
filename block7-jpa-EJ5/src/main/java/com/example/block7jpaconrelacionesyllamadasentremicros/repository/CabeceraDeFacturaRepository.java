@@ -20,12 +20,12 @@ public interface CabeceraDeFacturaRepository  extends JpaRepository<CabeceraDeFa
 
     @Query("SELECT f FROM CabeceraDeFactura f WHERE f.cliente.dni = :dniCliente")
     Optional<List<CabeceraDeFactura>> findByDniCliente(@Param("dniCliente") String dniCliente);
-
     @Query("SELECT f FROM CabeceraDeFactura f WHERE FUNCTION('YEAR', f.fechaFactura) = :anio")
     Optional<List<CabeceraDeFactura>> findByYear(@Param("anio") int anio);
 
     @Query("SELECT f FROM CabeceraDeFactura f WHERE FUNCTION('YEAR', f.fechaFactura) = :anio AND FUNCTION('MONTH', f.fechaFactura) = :mes")
     Optional<List<CabeceraDeFactura>> findByMonthAndYear(@Param("mes") int mes, @Param("anio") int anio);
+
 
 
 

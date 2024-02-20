@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface HistoricoVentaRepository extends JpaRepository<HistoricoVenta, Integer> {
 
     @Query("SELECT h FROM HistoricoVenta h WHERE h.mes = :mes AND h.ano = :ano")
-    Optional<HistoricoVenta> findByMesAndAno(@Param("mes") int mes, @Param("ano") int ano);
+    Optional<List<HistoricoVenta>> findByMesAndAno(@Param("mes") int mes, @Param("ano") int ano);
 
     @Query("SELECT h FROM HistoricoVenta h WHERE h.ano = :ano")
     List<HistoricoVenta> findByAno(@Param("ano") int ano);

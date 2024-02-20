@@ -25,7 +25,7 @@ public class LineasDeFacturaServiceImpl implements LineasDeFacturaService {
     private LineasDeFacturaRepository lineasDeFacturaRepository;
     @Override
     public LineasDeFacturaOutPutComplete getLineasDeFacutra(int id) {
-        return null;
+        return lineasDeFacturaRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe la linea de factura")).toLineasDeFacturaOutPutComplete();
     }
 
     @Override

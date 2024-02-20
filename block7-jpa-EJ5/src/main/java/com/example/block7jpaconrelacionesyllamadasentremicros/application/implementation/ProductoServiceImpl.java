@@ -24,7 +24,9 @@ public class ProductoServiceImpl implements ProductoService {
     private CabeceraDeFacturaRepository cabeceraDeFacturaRepository;
     @Override
     public ProductoOutPutDtoComplete getProducto(int id) {
-        return null;
+        return productoRepository.findById((long) id)
+                .orElseThrow(() -> new NoSuchElementException("No existe el producto"))
+                .toProductorOutPutDtoComplete();
     }
 
     @Override
