@@ -24,9 +24,10 @@ public class HistoricoVentaServiceImpl implements HistoricoVentaService {
     @Autowired
     private CacheMethods cacheMethods;
 
+
+
     @Transactional
     @Override
-
     public List<HistoricoVentasOutPut> obtenerHistoricoVentaMesConAno(int mes, int ano) {
         List<HistoricoVenta> historicosGuardados = new ArrayList<>();
         List<Map<String, Object>> result;
