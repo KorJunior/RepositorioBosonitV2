@@ -2,9 +2,13 @@ package com.example.block7estadventa.application.implementation;
 
 import com.example.block7estadventa.cache.CacheMethods;
 import com.example.block7estadventa.application.HistoricoVentaService;
-import com.example.block7estadventa.controller.dto.HistoricoVentasOutPut;
+import com.example.block7estadventa.controller.dto.historico.HistoricoVentasOutPut;
+import com.example.block7estadventa.domain.Cliente;
 import com.example.block7estadventa.domain.HistoricoVenta;
+import com.example.block7estadventa.domain.Producto;
+import com.example.block7estadventa.repository.ClienteRepository;
 import com.example.block7estadventa.repository.HistoricoVentaRepository;
+import com.example.block7estadventa.repository.ProductoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,6 +27,10 @@ public class HistoricoVentaServiceImpl implements HistoricoVentaService {
     private HistoricoVentaRepository historicoVentaRepository;
     @Autowired
     private CacheMethods cacheMethods;
+    @Autowired
+    private ClienteRepository clienteRepository;
+    @Autowired
+    private ProductoRepository productoRepository;
 
 
 
@@ -90,13 +98,35 @@ public class HistoricoVentaServiceImpl implements HistoricoVentaService {
         HistoricoVentasOutPut historicoVentasOutPut;
         for (HistoricoVenta historicoVenta : historicoVentas) {
             historicoVentasOutPut = new HistoricoVentasOutPut(historicoVenta);
-            historicoVentasOutPut.setProducto(cacheMethods.convertirIdProductoEnNombre(historicoVenta.getIdProducto()));
-            historicoVentasOutPut.setNombreCliente(cacheMethods.convertirDniClienteEnNombre(historicoVenta.getIdCliente()));
+            historicoVentasOutPut.setProducto(convertirIdProductoEnNombreInternamente(historicoVenta.getIdProducto()));
+            historicoVentasOutPut.setNombreCliente(convertirDniClienteEnNombreInternamente(historicoVenta.getIdCliente()));
             historicoVentasOutPuts.add(historicoVentasOutPut);
         }
         return historicoVentasOutPuts;
 
     }
+    String convertirIdProductoEnNombreInternamente(Long idProducto) {
+        Optional<Producto>producto=productoRepository.findById(idProducto.intValue());
+
+        if (producto.isPresent()){
+            Producto producto1=producto.get();
+            return producto1.getNombre();
+        }else{
+            return "Producto no encontrado";
+        }
+    }
+    String convertirDniClienteEnNombreInternamente(String idCliente) {
+        Optional<Cliente>cliente=clienteRepository.findById(idCliente);
+
+        if (cliente.isPresent()){
+            Cliente cliente1=cliente.get();
+            return cliente1.getNombre();
+        }else{
+            return "Cliente no encontrado";
+        }
+
+    }
+
 
 
 

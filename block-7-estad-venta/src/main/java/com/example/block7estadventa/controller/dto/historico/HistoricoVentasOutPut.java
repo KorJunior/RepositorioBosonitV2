@@ -1,4 +1,4 @@
-package com.example.block7estadventa.controller.dto;
+package com.example.block7estadventa.controller.dto.historico;
 
 import com.example.block7estadventa.domain.HistoricoVenta;
 import lombok.*;

@@ -23,6 +23,10 @@ public class ProductoController {
     public List<ProductoOutPutDtoComplete> getProductoByNombre(@PathVariable String nombre) {
         return productoService.getProductoByNombre(nombre);
     }
+    @PutMapping
+    public ProductoOutPutDtoComplete updateProducto(@RequestBody ProductoInputDto producto) {
+        return productoService.updateProducto(producto);
+    }
     @GetMapping("/{id}")
     public ProductoOutPutDtoComplete getProducto(@PathVariable int id) {
         return productoService.getProducto(id);

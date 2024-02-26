@@ -1,8 +1,7 @@
 package com.example.block7estadventa.controller;
 
 import com.example.block7estadventa.application.HistoricoVentaService;
-import com.example.block7estadventa.controller.dto.HistoricoVentasOutPut;
-import com.example.block7estadventa.domain.HistoricoVenta;
+import com.example.block7estadventa.controller.dto.historico.HistoricoVentasOutPut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

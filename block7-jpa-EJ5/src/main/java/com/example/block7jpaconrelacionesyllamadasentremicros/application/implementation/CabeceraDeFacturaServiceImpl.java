@@ -38,8 +38,7 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
     private ProductoRepository productoRepository;
     @Autowired
     private LineasDeFacturaRepository lineasDeFacturaRepository;
-    @Autowired
-    KafkaTemplate<String, FacturaOutPutHistorico> kafkaTemplate;
+
 
     @Override
     public CabeceraDeFacturaOutPutDtoComplete getCabeceraDeFactura(int id) {
@@ -77,7 +76,6 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
     }
     @Transactional
     public FacturaOutput addFactura(FacturaInputDto factura) {
-        FacturaOutPutHistorico facturaOutPutHistorico;
         CabeceraDeFactura facturaBase = new CabeceraDeFactura(factura);
         List<LineasDeFacturaInputFactura> lineasDeFacturas = factura.getLineasDeFactura();
         List<LineasDeFactura> listaLineasDeFactura;
@@ -104,8 +102,7 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
             asignarFacturaALasLineas(listaLineasDeFactura, facturaBase);
             lineasDeFacturaRepository.saveAll(listaLineasDeFactura);
 
-            facturaOutPutHistorico = new FacturaOutPutHistorico(facturaBase);
-            kafkaTemplate.send("factura", facturaOutPutHistorico);
+
             return new FacturaOutput(facturaBase);
         }else{
             System.out.println("No hay lineas de factura");

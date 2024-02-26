@@ -31,8 +31,8 @@ public class ClienteController {
         return clienteService.findByName(nombre);
     }
 
-    @PutMapping("/{id}")
-    public ClienteOutputDtoComplete updateCliente(@PathVariable String id, @RequestBody ClienteInputDto clienteInputDto) {
+    @PutMapping
+    public ClienteOutputDtoComplete updateCliente(@RequestBody ClienteInputDto clienteInputDto) {
         return clienteService.updateCliente(clienteInputDto);
     }
 

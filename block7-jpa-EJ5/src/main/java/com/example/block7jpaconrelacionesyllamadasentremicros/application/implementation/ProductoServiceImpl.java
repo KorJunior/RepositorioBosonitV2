@@ -1,13 +1,16 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation;
 
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.ProductoService;
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutPutHistorico;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoInputDto.ProductoInputDto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoComplete;
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoOutPutDto.ProductoOutPutHistorico;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.CabeceraDeFactura;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Producto;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.CabeceraDeFacturaRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,9 @@ public class ProductoServiceImpl implements ProductoService {
     private ProductoRepository productoRepository;
     @Autowired
     private CabeceraDeFacturaRepository cabeceraDeFacturaRepository;
+    @Autowired
+    KafkaTemplate<String, ProductoOutPutHistorico> productoKafkaTemplate;
+
     @Override
     public ProductoOutPutDtoComplete getProducto(int id) {
         return productoRepository.findById((long) id)
@@ -32,13 +38,31 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoOutPutDtoComplete addProducto(ProductoInputDto productoInputDto) {
         Producto producto = new Producto(productoInputDto);
+
         productoRepository.save(producto);
+        ProductoOutPutHistorico productoOutPutHistorico = new ProductoOutPutHistorico(producto);
+        productoKafkaTemplate.send("producto", productoOutPutHistorico);
         return producto.toProductorOutPutDtoComplete();
     }
 
     @Override
     public ProductoOutPutDtoComplete updateProducto(ProductoInputDto producto) {
-        return null;
+        Optional<Producto> producto1 = productoRepository.findById(producto.getIdProducto());
+        ProductoOutPutHistorico productoOutPutHistorico;
+        Producto producto2;
+        if (producto1.isPresent()) {
+            producto2 = producto1.get();
+            producto2.setDescripcionProducto(producto.getDescripcionProducto());
+            producto2.setPrecioProducto(producto.getPrecioProducto());
+            productoOutPutHistorico= new ProductoOutPutHistorico(producto2);
+            productoKafkaTemplate.send("producto", productoOutPutHistorico);
+            productoRepository.save(producto2);
+        } else {
+            throw new NoSuchElementException("No existe el producto");
+        }
+
+        return producto2.toProductorOutPutDtoComplete();
+
     }
 
     @Override

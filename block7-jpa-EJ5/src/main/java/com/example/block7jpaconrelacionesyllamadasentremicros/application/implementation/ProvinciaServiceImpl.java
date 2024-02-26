@@ -23,7 +23,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
     ProvinciaRepository provinciaRepository;
     @Override
     public ProvinciaOutPutComplete getProvincia(int id) {
-        return null;
+        return provinciaRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No existe la provincia")).toProvinciaOutPut();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ProvinciaServiceImpl implements ProvinciaService {
 
     @Override
     public void deleteProvincia(int id) {
-
+        provinciaRepository.deleteById(id);
     }
 
     @Override
