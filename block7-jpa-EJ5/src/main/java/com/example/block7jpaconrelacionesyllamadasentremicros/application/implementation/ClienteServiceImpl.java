@@ -8,6 +8,7 @@ import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dto
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.CabeceraDeFactura;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Cliente;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Provincia;
+import com.example.block7jpaconrelacionesyllamadasentremicros.exception.MyException;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.CabeceraDeFacturaRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ClienteRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ProvinciaRepository;
@@ -53,11 +54,11 @@ public class ClienteServiceImpl  implements ClienteService {
                 clienteRepository.save(cliente);
                 return cliente.toClienteOutputDto();
             }else{
-                throw new RuntimeException("Provincia no encontrada");
+                throw new MyException("Provincia no encontrada");
             }
 
         }else{
-            throw new RuntimeException("Provincia no encontrada");
+            throw new MyException("Provincia no encontrada");
         }
     }
 
