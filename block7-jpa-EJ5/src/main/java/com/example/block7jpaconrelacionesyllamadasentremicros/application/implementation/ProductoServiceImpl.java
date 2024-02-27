@@ -38,9 +38,12 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoOutPutDtoComplete addProducto(ProductoInputDto productoInputDto) {
         Producto producto = new Producto(productoInputDto);
-
+        ProductoOutPutHistoricoEntity productoOutPutHistoricoEntity;
+        ProductoOutPutHistorico productoOutPutHistorico = new ProductoOutPutHistorico();
         productoRepository.save(producto);
-        ProductoOutPutHistorico productoOutPutHistorico = new ProductoOutPutHistoricoEntity(producto);
+        productoOutPutHistoricoEntity = new ProductoOutPutHistoricoEntity(producto);
+        productoOutPutHistorico.setId(productoOutPutHistoricoEntity.getId());
+        productoOutPutHistorico.setNombre(productoOutPutHistoricoEntity.getNombre());
         productoKafkaTemplate.send("producto", productoOutPutHistorico);
         return producto.toProductorOutPutDtoComplete();
     }
@@ -48,15 +51,20 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public ProductoOutPutDtoComplete updateProducto(ProductoInputDto producto) {
         Optional<Producto> producto1 = productoRepository.findById(producto.getIdProducto());
-        ProductoOutPutHistorico productoOutPutHistorico;
+
+        ProductoOutPutHistorico productoOutPutHistorico = new ProductoOutPutHistorico();
+        ProductoOutPutHistoricoEntity productoOutPutHistoricoEntity;
         Producto producto2;
         if (producto1.isPresent()) {
             producto2 = producto1.get();
             producto2.setDescripcionProducto(producto.getDescripcionProducto());
             producto2.setPrecioProducto(producto.getPrecioProducto());
-            productoOutPutHistorico= new ProductoOutPutHistoricoEntity(producto2);
-            productoKafkaTemplate.send("producto", productoOutPutHistorico);
             productoRepository.save(producto2);
+            productoOutPutHistoricoEntity = new ProductoOutPutHistoricoEntity(producto2);
+            productoOutPutHistorico.setId(productoOutPutHistoricoEntity.getId());
+            productoOutPutHistorico.setNombre(productoOutPutHistoricoEntity.getNombre());
+            productoKafkaTemplate.send("producto", productoOutPutHistorico);
+
         } else {
             throw new NoSuchElementException("No existe el producto");
         }

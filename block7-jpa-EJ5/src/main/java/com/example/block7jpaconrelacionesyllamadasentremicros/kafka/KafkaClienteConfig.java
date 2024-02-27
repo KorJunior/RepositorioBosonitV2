@@ -22,10 +22,15 @@ public class KafkaClienteConfig {
     private String bootstrapServers;
 
     public Map<String, Object> producerConfig() {
+        return getStringObjectMap(bootstrapServers);
+    }
+
+    static Map<String, Object> getStringObjectMap(String bootstrapServers) {
         Map<String, Object> properties = new HashMap<>();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        properties.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, true);
         return properties;
     }
 
@@ -38,5 +43,5 @@ public class KafkaClienteConfig {
     public KafkaTemplate<String, ClienteOutPutHistorico> clienteKafkaTemplate() {
         return new KafkaTemplate<>(clienteProducerFactory());
     }
-
 }
+

@@ -41,15 +41,18 @@ public class ClienteServiceImpl  implements ClienteService {
     @Override
     public ClienteOutputDtoComplete addCliente(ClienteInputDto clienteInputDto) {
         Cliente cliente = new Cliente(clienteInputDto);
-        ClienteOutPutHistorico clienteOutPutHistorico;
+        ClienteOutPutHistorico clienteOutPutHistorico = new ClienteOutPutHistorico();
+        ClienteOutPutHistoricoEntity clienteOutPutHistoricoEntity;
         int codProvincia= clienteInputDto.getCodProvincia();
         if (codProvincia!=0){
             Optional<Provincia> o1= provinciaRepository.findById(codProvincia);
             if (o1.isPresent()){
                 Provincia provincia = o1.get();
                 cliente.setProvincia(provincia);
+                clienteOutPutHistoricoEntity = new ClienteOutPutHistoricoEntity(cliente);
+                clienteOutPutHistorico.setDni(clienteOutPutHistoricoEntity.getDni());
+                clienteOutPutHistorico.setNombre(clienteOutPutHistoricoEntity.getNombre());
 
-                clienteOutPutHistorico = new ClienteOutPutHistoricoEntity(cliente);
                 clienteKafkaTemplate.send("cliente", clienteOutPutHistorico);
                 clienteRepository.save(cliente);
                 return cliente.toClienteOutputDto();
@@ -75,6 +78,8 @@ public class ClienteServiceImpl  implements ClienteService {
     @Override
     public ClienteOutputDtoComplete updateCliente(ClienteInputDto clienteInputDto) {
         Optional<Cliente> cliente = clienteRepository.findById(clienteInputDto.getDni());
+        ClienteOutPutHistoricoEntity clienteOutPutHistoricoEntity;
+        ClienteOutPutHistorico clienteOutPutHistorico = new ClienteOutPutHistorico();
         if (cliente.isPresent()) {
             Cliente cliente1 = new Cliente(clienteInputDto);
             if (clienteInputDto.getCodProvincia() > 0) {
@@ -87,8 +92,11 @@ public class ClienteServiceImpl  implements ClienteService {
             } else {
                 throw new RuntimeException("No existe la provincia");
             }
+            clienteOutPutHistoricoEntity = new ClienteOutPutHistoricoEntity(cliente1);
             clienteRepository.save(cliente1);
-            clienteKafkaTemplate.send("cliente", new ClienteOutPutHistoricoEntity(cliente1));
+            clienteOutPutHistorico.setDni(clienteOutPutHistoricoEntity.getDni());
+            clienteOutPutHistorico.setNombre(clienteOutPutHistoricoEntity.getNombre());
+            clienteKafkaTemplate.send("cliente", clienteOutPutHistorico);
             return cliente1.toClienteOutputDto();
         } else {
             throw new RuntimeException("No existe el cliente");

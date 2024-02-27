@@ -5,6 +5,7 @@ import com.example.block7estadventa.controller.dto.cliente.ClienteInput;
 import com.example.block7estadventa.domain.Cliente;
 import com.example.block7estadventa.repository.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutPutHistorico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
-    private ObjectMapper objectMapper = new ObjectMapper();
+
 
 
 
@@ -26,15 +27,15 @@ public class ClienteServiceImpl implements ClienteService {
 
     }
     @KafkaListener(topics = "cliente", groupId = "group_cliente")
-    public void listenClienteTopic(String message) {
-        try {
-            ClienteInput clienteInput = objectMapper.readValue(message, ClienteInput.class);
+    public void listenClienteTopic(ClienteOutPutHistorico  message) {
+        System.out.println("Hola");
+        System.out.println(message);
+        System.out.println(message.getClass());
+        if (message instanceof ClienteOutPutHistorico clienteObtenido) {
+            ClienteInput clienteInput = new ClienteInput(clienteObtenido);
             saveCliente(clienteInput);
-
-        } catch (Exception e) {
-            // Manejar excepción
-            e.printStackTrace();
         }
+
     }
 
     @Override
