@@ -1,5 +1,6 @@
 package org.example.dto.dtoLineasDeFactura.lineasDeFacturaOutPut;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

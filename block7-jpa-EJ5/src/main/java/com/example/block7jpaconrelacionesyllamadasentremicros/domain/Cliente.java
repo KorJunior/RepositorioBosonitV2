@@ -1,12 +1,14 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.domain;
 
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.ClienteInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutPutDtoSimple;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
+
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dtoInterno.cliente.output.ClienteOutPutDtoSimpleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.dto.dtoCliente.ClienteInputDto;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutPutDtoSimple;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
 
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +50,7 @@ public class Cliente {
 
 
     public ClienteOutPutDtoSimple toClienteOutputDtoSimple() {
-        return new ClienteOutPutDtoSimple(this);
+        return new ClienteOutPutDtoSimpleEntity(this);
     }
 
 

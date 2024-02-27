@@ -1,9 +1,10 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.application;
 
 
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoInputDto.ProductoInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoComplete;
-import org.springframework.web.bind.annotation.PathVariable;
+
+
+import org.example.dto.dtoProducto.productoInputDto.ProductoInputDto;
+import org.example.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoComplete;
 
 import java.util.List;
 

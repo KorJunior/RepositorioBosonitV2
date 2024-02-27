@@ -1,5 +1,6 @@
 package org.example.dto.dtoLineasDeFactura.lineasDeFacturaOutPut;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +14,5 @@ public class LineasDeFacturaOutPutFactura {
     private int cantidad;
     private float precio;
 
-//    public LineasDeFacturaOutPutFactura(LineasDeFactura lineasDeFactura) {
-//        this.producto = new ProductoOutPutSimpleFactura(lineasDeFactura.getProducto());
-//        this.cantidad = lineasDeFactura.getCantidad();
-//        this.precio = lineasDeFactura.getPrecio();
-//
-//    }
+
 }

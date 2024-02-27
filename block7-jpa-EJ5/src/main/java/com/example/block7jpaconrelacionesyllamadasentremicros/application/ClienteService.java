@@ -1,8 +1,10 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.application;
 
 
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.ClienteInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
+
+
+import org.example.dto.dtoCliente.ClienteInputDto;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
 
 import java.util.List;
 

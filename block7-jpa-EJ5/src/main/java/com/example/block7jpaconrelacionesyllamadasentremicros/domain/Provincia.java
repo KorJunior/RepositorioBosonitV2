@@ -1,13 +1,15 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.domain;
 
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutPutDtoSimple;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.ProvinciaInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutSimple;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutComplete;
+
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dtoInterno.cliente.output.ClienteOutPutDtoSimpleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutPutDtoSimple;
+import org.example.dto.dtoProvincia.ProvinciaInputDto;
+import org.example.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutComplete;
+import org.example.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutSimple;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +47,7 @@ public class Provincia {
     }
 
     private ClienteOutPutDtoSimple convertirCliente(Cliente cliente) {
-        return new ClienteOutPutDtoSimple(cliente);
+        return new ClienteOutPutDtoSimpleEntity(cliente);
     }
 
 

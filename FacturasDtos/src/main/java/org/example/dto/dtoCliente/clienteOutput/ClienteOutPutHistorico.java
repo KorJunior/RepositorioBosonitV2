@@ -1,18 +1,17 @@
 package org.example.dto.dtoCliente.clienteOutput;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutSimple;
+import lombok.Setter;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClienteOutPutDtoSimple {
+@Setter
+@Getter
+public class ClienteOutPutHistorico {
+    private String dni;
     private String nombre;
-    private ProvinciaOutPutSimple provincia;
-
 
 
 }

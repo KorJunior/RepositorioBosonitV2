@@ -1,9 +1,9 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.controller;
 
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.ProvinciaService;
-import com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation.ProvinciaServiceImpl;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.ProvinciaInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutComplete;
+
+import org.example.dto.dtoProvincia.ProvinciaInputDto;
+import org.example.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutComplete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

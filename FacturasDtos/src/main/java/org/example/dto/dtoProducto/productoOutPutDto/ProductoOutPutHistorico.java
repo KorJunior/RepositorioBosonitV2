@@ -1,14 +1,16 @@
 package org.example.dto.dtoProducto.productoOutPutDto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoOutPutSimpleFactura {
-    private Long id;
+public class ProductoOutPutHistorico {
+    private long id;
     private String nombre;
 
 

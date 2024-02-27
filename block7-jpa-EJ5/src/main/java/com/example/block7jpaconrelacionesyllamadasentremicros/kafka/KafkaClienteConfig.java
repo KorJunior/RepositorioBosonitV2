@@ -1,9 +1,9 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.kafka;
 
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutPutHistorico;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutPutHistorico;
+
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutPutHistorico;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +17,6 @@ import java.util.Map;
 
 @Configuration
 public class KafkaClienteConfig {
-    @Value("${spring.kafka.bootstrap-servers}")
-    private String boootstrapServers;
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;

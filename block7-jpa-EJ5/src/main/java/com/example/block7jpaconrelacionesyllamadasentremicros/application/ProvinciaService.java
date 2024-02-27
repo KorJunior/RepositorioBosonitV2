@@ -1,8 +1,10 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.application;
 
 
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.ProvinciaInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutComplete;
+
+
+import org.example.dto.dtoProvincia.ProvinciaInputDto;
+import org.example.dto.dtoProvincia.provinciaOutPut.ProvinciaOutPutComplete;
 
 import java.util.List;
 

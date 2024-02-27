@@ -1,12 +1,8 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation;
 
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.CabeceraDeFacturaService;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.CabeceraDeFacturaInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.FacturaInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.CabeceraDeFacturaOutPutDtoComplete;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutPutHistorico;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutput;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoLineasDeFactura.lineasDeFacturaInputDto.LineasDeFacturaInputFactura;
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dtoInterno.cabeceraDeFactura.output.FacturaOutPutHistoricoEntity;
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dtoInterno.cabeceraDeFactura.output.FacturaOutputEntity;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.CabeceraDeFactura;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Cliente;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.LineasDeFactura;
@@ -16,6 +12,12 @@ import com.example.block7jpaconrelacionesyllamadasentremicros.repository.Cliente
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.LineasDeFacturaRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ProductoRepository;
 import jakarta.transaction.Transactional;
+import org.example.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.CabeceraDeFacturaInputDto;
+import org.example.dto.dtoCabeceraDeFactura.cabeceraDeFacturaInput.FacturaInputDto;
+import org.example.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.CabeceraDeFacturaOutPutDtoComplete;
+import org.example.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutPutHistorico;
+import org.example.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutput;
+import org.example.dto.dtoLineasDeFactura.lineasDeFacturaInputDto.LineasDeFacturaInputFactura;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -103,7 +105,7 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
             lineasDeFacturaRepository.saveAll(listaLineasDeFactura);
 
 
-            return new FacturaOutput(facturaBase);
+            return new FacturaOutputEntity(facturaBase);
         }else{
             System.out.println("No hay lineas de factura");
         }
@@ -172,14 +174,14 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
 
         return factura.orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"))
                 .stream()
-                .map(FacturaOutput::new)
+                .map(FacturaOutputEntity::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public FacturaOutput findByIdCabecera(Integer id) {
         Optional<CabeceraDeFactura> factura = cabeceraDeFacturaRepository.findByIdCabecera(id);
-        return factura.map(FacturaOutput::new).orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"));
+        return factura.map(FacturaOutputEntity::new).orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"));
     }
 
     @Override
@@ -187,8 +189,8 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
         return  cabeceraDeFacturaRepository.findByYear(ano)
                 .orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"))
                 .stream()
-                .map(FacturaOutPutHistorico::new)
-                .toList();
+                .map(FacturaOutPutHistoricoEntity::new)
+                .collect(Collectors.toList());
 
     }
 
@@ -197,15 +199,15 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
         return cabeceraDeFacturaRepository.findByMonthAndYear(mes, ano)
                 .orElseThrow(() -> new RuntimeException("No se ha encontrado la factura"))
                 .stream()
-                .map(FacturaOutPutHistorico::new)
-                .toList();
+                .map(FacturaOutPutHistoricoEntity::new)
+                .collect(Collectors.toList());
     }
 
 
     private List<FacturaOutput> convertirListaFacturas(List<CabeceraDeFactura> all) {
         List<FacturaOutput> listaFacturas = new ArrayList<>();
         for (CabeceraDeFactura cabeceraDeFactura : all) {
-            listaFacturas.add(new FacturaOutput(cabeceraDeFactura));
+            listaFacturas.add(new FacturaOutputEntity(cabeceraDeFactura));
         }
         return listaFacturas;
     }
@@ -214,7 +216,7 @@ public class CabeceraDeFacturaServiceImpl implements CabeceraDeFacturaService {
         Optional<List<CabeceraDeFactura>>  factura = cabeceraDeFacturaRepository.findByCodigoDeProducto(codigo);
 
         return factura.orElseThrow(()-> new RuntimeException("No se ha encontrado la factura")).
-                stream().map(FacturaOutput::new).collect(Collectors.toList());
+                stream().map(FacturaOutputEntity::new).collect(Collectors.toList());
 
     }
 }

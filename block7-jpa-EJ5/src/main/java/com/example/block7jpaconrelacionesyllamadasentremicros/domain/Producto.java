@@ -1,12 +1,13 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.domain;
 
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoInputDto.ProductoInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoComplete;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoSimple;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.dto.dtoProducto.productoInputDto.ProductoInputDto;
+import org.example.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoComplete;
+import org.example.dto.dtoProducto.productoOutPutDto.ProductoOutPutDtoSimple;
 
 
 @Entity

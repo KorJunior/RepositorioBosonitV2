@@ -1,10 +1,7 @@
 package com.example.block7jpaconrelacionesyllamadasentremicros.application.implementation;
 
 import com.example.block7jpaconrelacionesyllamadasentremicros.application.ClienteService;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCabeceraDeFactura.cabeceraDeFacturaOutPutDto.FacturaOutPutHistorico;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.ClienteInputDto;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutPutHistorico;
-import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
+import com.example.block7jpaconrelacionesyllamadasentremicros.controller.dtoInterno.cliente.output.ClienteOutPutHistoricoEntity;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.CabeceraDeFactura;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Cliente;
 import com.example.block7jpaconrelacionesyllamadasentremicros.domain.Provincia;
@@ -12,6 +9,9 @@ import com.example.block7jpaconrelacionesyllamadasentremicros.exception.MyExcept
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.CabeceraDeFacturaRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ClienteRepository;
 import com.example.block7jpaconrelacionesyllamadasentremicros.repository.ProvinciaRepository;
+import org.example.dto.dtoCliente.ClienteInputDto;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutPutHistorico;
+import org.example.dto.dtoCliente.clienteOutput.ClienteOutputDtoComplete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class ClienteServiceImpl  implements ClienteService {
                 Provincia provincia = o1.get();
                 cliente.setProvincia(provincia);
 
-                clienteOutPutHistorico = new ClienteOutPutHistorico(cliente);
+                clienteOutPutHistorico = new ClienteOutPutHistoricoEntity(cliente);
                 clienteKafkaTemplate.send("cliente", clienteOutPutHistorico);
                 clienteRepository.save(cliente);
                 return cliente.toClienteOutputDto();
@@ -88,7 +88,7 @@ public class ClienteServiceImpl  implements ClienteService {
                 throw new RuntimeException("No existe la provincia");
             }
             clienteRepository.save(cliente1);
-            clienteKafkaTemplate.send("cliente", new ClienteOutPutHistorico(cliente1));
+            clienteKafkaTemplate.send("cliente", new ClienteOutPutHistoricoEntity(cliente1));
             return cliente1.toClienteOutputDto();
         } else {
             throw new RuntimeException("No existe el cliente");
