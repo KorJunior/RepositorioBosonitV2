@@ -28,9 +28,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
     @KafkaListener(topics = "cliente", groupId = "group_cliente")
     public void listenClienteTopic(ClienteOutPutHistorico  message) {
-        System.out.println("Hola");
-        System.out.println(message);
-        System.out.println(message.getClass());
+
         if (message instanceof ClienteOutPutHistorico clienteObtenido) {
             ClienteInput clienteInput = new ClienteInput(clienteObtenido);
             saveCliente(clienteInput);
