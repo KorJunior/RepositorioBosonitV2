@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,14 +20,22 @@
             const idCiudad = document.getElementById('idCiudad').value;
             if (idCiudad) {
                 const response = await fetch('http://localhost:8080/ciudad/progress?id=' + idCiudad);
-                const progress = await response.text();
-                document.getElementById('progreso').innerText = 'Progreso: ' + progress;
+                const data = await response.json(); // Asumiendo que el backend envía una respuesta JSON
+                const progresoElement = document.getElementById('progreso');
+                if (data.status === "Error desconocido") {
+                    progresoElement.style.color = 'red';
+                } else {
+                    progresoElement.style.color = 'green';
+                }
+                progresoElement.innerText = data.message +" : " +data.status;
             } else {
                 alert('Por favor, añada una ciudad primero.');
             }
         }
+
     </script>
 </head>
+
 <body>
     <h2>Añadir Ciudad</h2>
     <input type="text" id="nombreCiudad" placeholder="Nombre de la Ciudad">
@@ -37,4 +46,5 @@
     <button onclick="getProgress()">Ver Progreso</button>
     <p id="progreso"></p>
 </body>
+
 </html>

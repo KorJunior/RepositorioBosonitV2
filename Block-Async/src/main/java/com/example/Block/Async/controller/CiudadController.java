@@ -1,6 +1,7 @@
 package com.example.Block.Async.controller;
 
 import com.example.Block.Async.ciudadservice.CiudadService;
+import com.example.Block.Async.controller.dto.StatusOutput.ResponseMessage;
 import com.example.Block.Async.controller.dto.StatusOutput.StatusOutput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class CiudadController {
     }
 
     @GetMapping("/progress")
-    public String getProgress(@RequestParam int id) {
+    public ResponseMessage getProgress(@RequestParam int id) {
         return service.getProgress(id);
     }
 

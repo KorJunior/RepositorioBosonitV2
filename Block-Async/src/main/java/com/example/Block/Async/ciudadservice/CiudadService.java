@@ -1,6 +1,7 @@
 package com.example.Block.Async.ciudadservice;
 
 import com.example.Block.Async.controller.CiudadController;
+import com.example.Block.Async.controller.dto.StatusOutput.ResponseMessage;
 import com.example.Block.Async.controller.dto.StatusOutput.StatusOutput;
 import com.example.Block.Async.domain.Status;
 import lombok.RequiredArgsConstructor;
@@ -34,46 +35,38 @@ public class CiudadService {
         for (int i = 0; i < numero; i++) {
             try {
                 Thread.sleep(2000);
+
+                if (Math.random() < 0.05) {
+                    completableFuture.completeExceptionally(new RuntimeException("Error desconocido"));
+                    return completableFuture;
+                }
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                completableFuture.completeExceptionally(e);
+                return completableFuture;
             }
             statusOutput.setPorcentaje(i);
             System.out.println("Vamos equipo, ya casi terminamos");
         }
 
-
         completableFuture.complete("termine!!");
         return completableFuture;
     }
 
-    //
-//    void cargaCiudad(String no  int numero = 25;
-//        AtomicInteger progress = progreso.get(id);
-//
-//        for (int i = 0; i < numero; i++) {
-//            Thread.sleep(2000);
-//            progress.getAndIncrement();
-//            progreso.put(id, progress);
-//            System.out.println("Vamos equipo, ya casi terminamos");
-//        }
-//        ciudades.put(id, nombre);
-//
-//        System.out.println("Kebab");
-//    }
-
-    public String getProgress(int id) {
+    public ResponseMessage getProgress(int id) {
         StatusOutput statusOutput = ciudades.get(id);
         if (!statusOutput.getMensaje().isDone()) {
-            double porcentaje = (double) statusOutput.getPorcentaje() /25*100;
-            System.out.println("Esto es un porcentaje " +porcentaje);
-            return "" + porcentaje+" %";
+            double porcentaje = (double) statusOutput.getPorcentaje() / 25 * 100;
+            System.out.println("Esto es un porcentaje " + porcentaje);
+            return new ResponseMessage("Cargando", porcentaje + " %");
+        } else if (statusOutput.getMensaje().isCompletedExceptionally()) {
+            return new ResponseMessage("Error", "Error desconocido");
+        } else {
+            try {
+                String msg = statusOutput.getMensaje().get();
+                return new ResponseMessage(msg, "100%");
+            } catch (InterruptedException | ExecutionException e) {
+                return new ResponseMessage("Error", "Error desconocido");
+            }
         }
-        try {
-            String msg = statusOutput.getMensaje().get();
-            return msg;
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 }
