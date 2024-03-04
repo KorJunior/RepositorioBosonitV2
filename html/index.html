@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Ciudad y Ver Progreso</title>
+    <script>
+        // Función para añadir una ciudad
+        async function addCiudad() {
+            const nombreCiudad = document.getElementById('nombreCiudad').value;
+            const response = await fetch('http://localhost:8080/ciudad/add?nombre=' + nombreCiudad, { method: 'POST' });
+            const id = await response.text();
+            document.getElementById('idCiudad').value = id;
+            alert('Ciudad añadida con ID: ' + id);
+        }
+
+        // Función para obtener el progreso
+        async function getProgress() {
+            const idCiudad = document.getElementById('idCiudad').value;
+            if (idCiudad) {
+                const response = await fetch('http://localhost:8080/ciudad/progress?id=' + idCiudad);
+                const progress = await response.text();
+                document.getElementById('progreso').innerText = 'Progreso: ' + progress;
+            } else {
+                alert('Por favor, añada una ciudad primero.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Añadir Ciudad</h2>
+    <input type="text" id="nombreCiudad" placeholder="Nombre de la Ciudad">
+    <button onclick="addCiudad()">Añadir Ciudad</button>
+
+    <h2>Ver Progreso</h2>
+    <input type="text" id="idCiudad" placeholder="ID de la Ciudad">
+    <button onclick="getProgress()">Ver Progreso</button>
+    <p id="progreso"></p>
+</body>
+</html>
