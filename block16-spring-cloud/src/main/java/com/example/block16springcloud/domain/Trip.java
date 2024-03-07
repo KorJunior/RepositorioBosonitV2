@@ -12,6 +12,7 @@ import org.example.dto.client.output.ClientOutPutSimple;
 import org.example.dto.trip.TripInput;
 import org.example.dto.trip.output.TripOutputComplete;
 import org.example.dto.trip.output.TripOutputSimple;
+import org.example.dto.tripShop.TripShopOutput;
 
 import java.util.*;
 
@@ -24,6 +25,7 @@ public class Trip {
     @Id
     @GeneratedValue
     private int tripId;
+    private int quantityPassenger;
     private String origin;
     private String destination;
     private Date departureDate;
@@ -34,6 +36,7 @@ public class Trip {
 
     public Trip(TripInput tripInput) {
         this.origin = tripInput.getOrigin();
+        this.quantityPassenger = 0;
         this.destination = tripInput.getDestination();
         this.departureDate = tripInput.getDepartureDate();
         this.arrivalDate = tripInput.getArrivalDate();
@@ -42,8 +45,9 @@ public class Trip {
 
 
 
+
     public TripOutputComplete toTripOutputComplete() {
-        return new TripOutputComplete(this.tripId, this.origin, this.destination, this.departureDate, this.arrivalDate, toPassengerOutputSimple(), this.status);
+        return new TripOutputComplete(this.tripId,this.quantityPassenger, this.origin, this.destination, this.departureDate, this.arrivalDate, toPassengerOutputSimple(), this.status);
     }
 
     private List<ClientOutPutSimple> toPassengerOutputSimple() {
@@ -60,6 +64,6 @@ public class Trip {
     }
 
     public TripOutputSimple toTripOutputSimple() {
-        return new TripOutputSimple(this.tripId, this.origin, this.destination, this.departureDate, this.arrivalDate, this.status);
+        return new TripOutputSimple(this.tripId,this.quantityPassenger, this.origin, this.destination, this.departureDate, this.arrivalDate, this.status);
     }
 }

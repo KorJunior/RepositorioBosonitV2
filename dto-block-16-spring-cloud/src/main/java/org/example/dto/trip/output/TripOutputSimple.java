@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class TripOutputSimple {
     private int id;
+    private int quantityPassenger;
     private String origin;
     private String destination;
     private Date departureDate;

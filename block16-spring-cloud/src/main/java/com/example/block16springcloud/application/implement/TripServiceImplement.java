@@ -1,17 +1,17 @@
 package com.example.block16springcloud.application.implement;
 
-import com.example.block16springcloud.controller.TicketInterface;
 import com.example.block16springcloud.application.TripService;
 import com.example.block16springcloud.domain.Client;
 import com.example.block16springcloud.domain.Trip;
 import com.example.block16springcloud.exception.MyException;
+import com.example.block16springcloud.rabbit_mq.publisher.RabbitMQProducer;
 import com.example.block16springcloud.repository.ClientRepository;
 import com.example.block16springcloud.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
-import org.example.dto.ticket.TicketOutput;
 import org.example.dto.trip.TripInput;
 import org.example.dto.trip.output.TripOutputComplete;
 import org.example.dto.trip.output.TripOutputSimple;
+import org.example.dto.tripShop.TripShopOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,6 @@ public class TripServiceImplement implements TripService {
     TripRepository tripRepository;
     @Autowired
     ClientRepository clientRepository;
-    @Autowired
-    private TicketInterface ticketInterface;
 
 
 
@@ -70,18 +68,17 @@ public class TripServiceImplement implements TripService {
         Optional<Client> passengerDataBase = clientRepository.findById(passengerId);
         Client passenger;
         Trip trip;;
-        TicketOutput ticketOutput;
 
         if (tripDataBase.isPresent()) {
             if (passengerDataBase.isPresent()) {
                 passenger = passengerDataBase.get();
                 passenger.setTrip(tripDataBase.get());
                 trip = tripDataBase.get();
+                trip.setQuantityPassenger(trip.getQuantityPassenger() + 1);
+                tripRepository.save(trip);
                 clientRepository.save(passenger);
 
-                ticketOutput = new TicketOutput(trip.getTripId(), passenger.getClientId(), passenger.getNombre(), passenger.getApellido(), passenger.getEmail(), trip.getOrigin(), trip.getDestination(), trip.getDepartureDate(), trip.getArrivalDate());
 
-                ticketInterface.sendTicket(ticketOutput);
                 return trip.toTripOutputComplete();
             } else {
                 throw new MyException("Passenger not found");
@@ -95,6 +92,7 @@ public class TripServiceImplement implements TripService {
     public TripOutputComplete addTrip(TripInput tripInput) {
         Trip trip = new Trip(tripInput);
         tripRepository.save(trip);
+
         return trip.toTripOutputComplete();
     }
 
@@ -142,5 +140,18 @@ public class TripServiceImplement implements TripService {
     public List<TripOutputSimple> getTrips() {
         List<Trip> tripsDataBase = tripRepository.findAll();
         return tripsDataBase.stream().map(Trip::toTripOutputSimple).toList();
+    }
+
+    @Override
+    public void guardarTrip(TripShopOutput trip) {
+        Optional<Trip> tripDataBase = tripRepository.findById(trip.getIdTrip());
+
+        if (tripDataBase.isPresent()) {
+            Trip trip1 = tripDataBase.get();
+            trip1.setQuantityPassenger(trip.getQuantity());
+            tripRepository.save(trip1);
+        }else{
+            throw new MyException("Trip not found");
+        }
     }
 }

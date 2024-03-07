@@ -4,6 +4,7 @@ package com.example.block16springcloud.application;
 import org.example.dto.trip.TripInput;
 import org.example.dto.trip.output.TripOutputComplete;
 import org.example.dto.trip.output.TripOutputSimple;
+import org.example.dto.tripShop.TripShopOutput;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface TripService {
     TripOutputComplete updateTrip(int tripId, TripInput tripInput);
     List<TripOutputSimple> getTrips();
 
+    void guardarTrip(TripShopOutput trip);
 }
