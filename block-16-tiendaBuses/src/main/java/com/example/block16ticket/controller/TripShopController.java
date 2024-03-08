@@ -19,7 +19,7 @@ public class TripShopController {
 
     @RequestMapping("/buy")
     public String buyTicket(@RequestParam int tripId) {
-        TripShopOutput tripShop ;
+        TripShopOutput tripShop;
         tripShop =tripShopService.buyTicket(tripId);
         ticketInterface.sendTrip(tripShop);
         return "Ticket bought";
