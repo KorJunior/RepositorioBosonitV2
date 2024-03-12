@@ -26,7 +26,7 @@ public class DictionaryController {
     }
     @GetMapping("/search")
     public List<DictionaryOutputSimple> searchDictionary(@RequestParam String text) {
-        return dictionaryService.searchDictionary(text);
+        return dictionaryService.searchDictionaryv2(text);
     }
 
 }
