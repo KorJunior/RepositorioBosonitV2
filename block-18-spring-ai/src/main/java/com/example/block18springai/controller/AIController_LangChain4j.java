@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/ai")
 @RestController
-public class AIController {
+public class AIController_LangChain4j {
     ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
     Assistant assistant = AiServices.builder(Assistant.class)
