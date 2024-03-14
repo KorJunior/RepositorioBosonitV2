@@ -1,3 +1,4 @@
 
 block-18-spring-ai/src/main/resources/application.properties
 block-18-spring-ai/src/main/java/com/example/block18springai/ai_config/ApiKeys.java
+block-18-spring-ia-vector-database/src/main/resources/application.properties
