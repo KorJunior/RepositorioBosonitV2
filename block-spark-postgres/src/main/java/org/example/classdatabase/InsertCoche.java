@@ -8,10 +8,7 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructType;
 import org.apache.spark.sql.types.StructField;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Properties;
-import java.util.List;
+import java.util.*;
 
 public class InsertCoche {
     private SparkSession spark;
@@ -42,6 +39,7 @@ public class InsertCoche {
         StructType schema = DataTypes.createStructType(fields);
 
         List<Row> rows = new ArrayList<>();
+        System.out.println(Arrays.toString(datos.values().toArray()));
         rows.add(RowFactory.create(datos.values().toArray()));
 
         Dataset<Row> df = spark.createDataFrame(rows, schema);
