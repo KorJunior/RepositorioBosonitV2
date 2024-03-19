@@ -19,13 +19,13 @@ public class Coche {
     private String modelo;
     private String color;
     private float importe;
-    private int año;
+    private int ano;
 
     public Coche(CocheInput coche) {
         this.marca = coche.getMarca();
         this.modelo = coche.getModelo();
         this.color = coche.getColor();
         this.importe = coche.getImporte();
-        this.año = coche.getAño();
+        this.ano = coche.getAño();
     }
 }

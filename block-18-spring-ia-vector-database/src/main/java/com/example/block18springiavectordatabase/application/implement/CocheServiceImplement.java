@@ -20,7 +20,7 @@ public class CocheServiceImplement implements CocheService {
     public void saveCoche() {
 
         Faker faker = new Faker();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 2000; i++) {
             CocheInput cocheInput = new CocheInput();
             cocheInput.setMarca(faker.company().name());
             cocheInput.setModelo(faker.funnyName().name());

@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.example</groupId>
-  <artifactId>block-spark-1</artifactId>
+  <artifactId>block-spark-postgres</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>block-spark-1</name>
+  <name>block-spark-postgres</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -48,6 +48,11 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.7.3</version>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
