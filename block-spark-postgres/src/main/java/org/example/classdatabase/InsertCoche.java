@@ -47,5 +47,7 @@ public class InsertCoche {
         df.write()
                 .mode("append")
                 .jdbc("jdbc:postgresql://localhost:5432/concesionario", "public.coche", this.connectionProperties);
+
     }
+
 }
