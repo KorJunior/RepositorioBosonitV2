@@ -31,7 +31,6 @@ public class GeneradorDeFichero {
                 bw.write(padRight(String.format("%.2f", importe), 9));
                 bw.write(padRight(String.valueOf(ano), 5));
 
-                bw.write("\n");
             }
 
             bw.close();

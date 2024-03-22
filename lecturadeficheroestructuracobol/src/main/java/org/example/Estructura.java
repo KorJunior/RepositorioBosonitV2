@@ -50,6 +50,13 @@ public class Estructura {
             e.printStackTrace();
         }
     }
+    int obtenerTamañoEnBytes() {
+        int tamaño = 0;
+        for (EstructuraCampo campo : estructura) {
+            tamaño += campo.getLongitud();
+        }
+        return tamaño;
+    }
 
     @Override
     public String toString() {
