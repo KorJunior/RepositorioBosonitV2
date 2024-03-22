@@ -21,43 +21,46 @@ public class AppConSpark {
                 .getOrCreate();
         JavaSparkContext jsc = new JavaSparkContext(spark.sparkContext());
 
-        String contenidoArchivo = jsc.textFile(archivoDatos.getPath()).first();
+        JavaRDD<String> lineasArchivo = jsc.textFile(archivoDatos.getPath());
 
-        int longitudRegistro = estructura.obtenerTamañodeBulto();
-
-        List<String> registros = new ArrayList<>();
-        for (int start = 0; start < contenidoArchivo.length(); start += longitudRegistro) {
-            int end = Math.min(contenidoArchivo.length(), start + longitudRegistro);
-            registros.add(contenidoArchivo.substring(start, end));
-        }
-        JavaRDD<String> registrosRDD = jsc.parallelize(registros);
-
-        JavaRDD<Row> rowRDD = registrosRDD.map(linea -> {
-            List<Object> values = new ArrayList<>();
+        JavaRDD<Row> rowRDD = lineasArchivo.flatMap(linea -> {
+            List<Row> rows = new ArrayList<>();
+            int totalRegistroLength = estructura.obtenerTamañodeBulto() ;
             int startPosition = 0;
-            for (EstructuraCampo campo : estructura.getEstructura()) {
-                String rawValue = linea.substring(startPosition, startPosition + campo.getLongitud()).trim();
-                Object value;
-                switch (campo.getTipo()) {
-                    case "int":
-                        value = Integer.parseInt(rawValue);
-                        break;
-                    case "decimal":
-                        if (rawValue.contains(",")) {
+
+            while (!linea.substring(startPosition).isEmpty()) {
+                List<Object> values = new ArrayList<>();
+                int currentPosition = startPosition;
+
+                for (EstructuraCampo campo : estructura.getEstructura()) {
+                    String rawValue = linea.substring(currentPosition, currentPosition + campo.getLongitud()).trim();
+                    Object value = null;
+                    switch (campo.getTipo()) {
+                        case "int":
+                            value = Integer.parseInt(rawValue);
+                            break;
+                        case "decimal":
                             rawValue = rawValue.replace(",", ".");
-                        }
-                        value = Double.parseDouble(rawValue);
-                        break;
-                    case "string":
-                    default:
-                        value = rawValue;
-                        break;
+                            value = Double.parseDouble(rawValue);
+                            break;
+                        case "string":
+                        default:
+                            value = rawValue;
+                            break;
+                    }
+                    values.add(value);
+                    currentPosition += campo.getLongitud();
                 }
-                values.add(value);
-                startPosition += campo.getLongitud();
+
+                if (values.size() == estructura.getEstructura().size()) {
+                    rows.add(RowFactory.create(values.toArray()));
+                }
+                startPosition += totalRegistroLength; 
             }
-            return RowFactory.create(values.toArray());
+
+            return rows.iterator();
         });
+
 
         List<StructField> fields = new ArrayList<>();
 
