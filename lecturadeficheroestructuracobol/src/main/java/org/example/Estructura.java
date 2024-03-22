@@ -3,11 +3,12 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Estructura {
+public class Estructura implements Serializable {
     private List<EstructuraCampo> estructura = new ArrayList<>();
 
     public Estructura(File estructura) {
@@ -50,7 +51,7 @@ public class Estructura {
             e.printStackTrace();
         }
     }
-    int obtenerTamañoEnBytes() {
+    int obtenerTamañodeBulto() {
         int tamaño = 0;
         for (EstructuraCampo campo : estructura) {
             tamaño += campo.getLongitud();

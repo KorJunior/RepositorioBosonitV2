@@ -1,6 +1,8 @@
 package org.example;
 
-class EstructuraCampo {
+import java.io.Serializable;
+
+class EstructuraCampo implements Serializable {
     private String tipo;
     private int longitud;
 

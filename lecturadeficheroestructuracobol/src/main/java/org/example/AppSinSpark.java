@@ -1,9 +1,5 @@
 package org.example;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +16,7 @@ public class AppSinSpark {
             FileReader fileReader = null;
             try {
                 Estructura estructura = new Estructura(archivoEstructura);
-                int tamañoBytes = estructura.obtenerTamañoEnBytes();
+                int tamañoBytes = estructura.obtenerTamañodeBulto();
                 char[] buffer = new char[tamañoBytes];
                 fileReader = new FileReader(archivoDatos);
                 List<String> datosLocales;
