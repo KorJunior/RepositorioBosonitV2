@@ -5,7 +5,10 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +16,7 @@ public class AppConSpark {
     static File archivoEstructura = new File("estructura.txt");
     static File archivoDatos = new File("vehiculos.txt");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Estructura estructura = new Estructura(archivoEstructura);
         SparkSession spark = SparkSession.builder()
                 .appName("Lector Fichero Cobol")
@@ -24,6 +27,7 @@ public class AppConSpark {
         JavaRDD<String> lineasArchivo = jsc.textFile(archivoDatos.getPath());
 
         JavaRDD<Row> rowRDD = lineasArchivo.flatMap(linea -> {
+
             List<Row> rows = new ArrayList<>();
             int totalRegistroLength = estructura.obtenerTamañodeBulto() ;
             int startPosition = 0;
@@ -63,6 +67,7 @@ public class AppConSpark {
 
 
         List<StructField> fields = new ArrayList<>();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String[] nombresDeColumnas = {"ID", "MARCA", "MODELO", "COLOR", "IMPORTE", "ANO"};
 
@@ -87,5 +92,7 @@ public class AppConSpark {
 
         Dataset<Row> df = spark.createDataFrame(rowRDD, schema);
         df.show(50);
+        String s = br.readLine();
+
     }
 }
